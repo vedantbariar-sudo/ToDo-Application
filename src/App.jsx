@@ -6,7 +6,7 @@ function App() {
   
   async function getTasks() {
     console.log("getTasks running");
-    const response = await fetch("http://localhost:5002/tasks");
+    const response = await fetch("https://vedant-todo-backend.onrender.com/tasks");
 
     const data = await response.json();
 
@@ -18,7 +18,7 @@ useEffect(() => {
 }, []);
  async function addTask() {
     if (input.trim() !== "") {
-      const response = await fetch("http://localhost:5002/tasks", {
+      const response = await fetch("https://vedant-todo-backend.onrender.com/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ task: input })
@@ -32,7 +32,7 @@ useEffect(() => {
   }
    async function deleteTask(id) {
     const response = await fetch(
-        "http://localhost:5002/tasks",
+        "https://vedant-todo-backend.onrender.com/tasks",
         {
             method: "DELETE",
             headers: {
