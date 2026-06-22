@@ -63,7 +63,9 @@ app.delete(
         res.json(data);
     }
 );
+const PORT =
+process.env.PORT || 5002;
 console.log("DELETE ROUTE VERSION 123456");
-app.listen(5002, () => {
-    console.log("Server running on port 5002");
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
