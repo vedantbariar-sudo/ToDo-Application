@@ -8,7 +8,13 @@ const taskSchema = new mongoose.Schema({
     task: String
 });
 
+const userSchema = new mongoose.Schema({
+    email: String,
+    password: String
+});
+
 const Task = mongoose.model("Task", taskSchema);
+const User = mongoose.model("User", userSchema);
 mongoose.connect(
     process.env.MONGO_URI
 );
@@ -61,6 +67,18 @@ app.delete(
         const data = await Task.find();
 
         res.json(data);
+    }
+);
+
+app.post(
+    "/register",
+    async (req, res) => {
+        console.log(req.body);
+        const user = await User.create({
+            email: req.body.email,
+            password: req.body.password
+        });
+        res.json(user);
     }
 );
 const PORT =
