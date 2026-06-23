@@ -59,14 +59,18 @@ app.post(
     async (req, res) => {
 
         console.log("BODY:", req.body);
+        console.log("USER:", req.user);
 
         await Task.create({
             task: req.body.task,
             userId: req.user.id
         });
 
-        const data = await Task.find();
-
+        const data = await Task.find(
+            {
+            userId: req.user.id
+        }
+        );
         console.log("DATA:", data);
 
         res.json(data);
