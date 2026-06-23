@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 console.log("VEDANT BACKEND FILE STARTED");
 const express = require("express");
@@ -74,13 +76,42 @@ app.post(
     "/register",
     async (req, res) => {
         console.log(req.body);
-        const user = await User.create({
+        const hashedpassword = await bcrypt.hash
+        const user = await User.findOne({
             email: req.body.email,
-            password: req.body.password
+            password: hashedpassword
         });
+        const isMatch = 
+        await bcrypt.compare(req.body.password, user.password);
         res.json(user);
     }
 );
+
+app.post(
+    "/login",
+    async (req, res) => {
+        const user = await User.findOne({
+            email: req.body.email
+        });
+        if (!user) {
+            return res.json({ message: "User not found" });
+        }
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+        if (!isMatch) {
+            return res.json({ message: "Invalid password" });
+        }
+        const token = jwt.sign(
+            { id: user._id },
+            "vedantSecretKey"
+
+        );
+        res.json({
+            message: "Login successful"
+            token: token
+        });
+    }
+);
+
 const PORT =
 process.env.PORT || 5002;
 console.log("DELETE ROUTE VERSION 123456");
