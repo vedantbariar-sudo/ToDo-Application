@@ -106,7 +106,7 @@ app.post(
 
         );
         res.json({
-            message: "Login successful"
+            message: "Login successful",
             token: token
         });
     }
