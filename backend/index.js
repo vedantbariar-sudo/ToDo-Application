@@ -7,7 +7,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema({
-    task: String
+    task: String,
+    userId: String
 });
 
 const userSchema = new mongoose.Schema({
@@ -29,22 +30,39 @@ app.get("/hello", (req, res) => {
     console.log("HELLO ROUTE HIT");
     res.send("HELLO FROM BACKEND");
 });
+
+function authMiddleware(req, res, next) {
+    const token = req.headers.authorization;
+    if (!token) {
+        return res.status(401).json({ message: "No token provided" });
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch {
+        return res.status(401).json({ message: "Invalid token" });
+    }
+}
 app.get(
-    "/tasks",
+    "/tasks", authMiddleware,
     async (req, res) => {
-        const data = await Task.find();
+        const data = await Task.find({
+            userId: req.user.id
+        });
 
         res.json(data);
     }
 );
 app.post(
-    "/tasks",
+    "/tasks", authMiddleware,
     async (req, res) => {
 
         console.log("BODY:", req.body);
 
         await Task.create({
-            task: req.body.task
+            task: req.body.task,
+            userId: req.user.id
         });
 
         const data = await Task.find();
