@@ -103,6 +103,7 @@ app.post(
         if (!user) {
             return res.json({ message: "User not found" });
         }
+        console.log("USER:", user);
         const isMatch = await bcrypt.compare(req.body.password, user.password);
         if (!isMatch) {
             return res.json({ message: "Invalid password" });
@@ -112,6 +113,7 @@ app.post(
             process.env.JWT_SECRET
 
         );
+        console.log("TOKEN CREATED");
         res.json({
             message: "Login successful",
             token: token
