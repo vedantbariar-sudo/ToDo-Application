@@ -76,13 +76,20 @@ app.post(
     "/register",
     async (req, res) => {
         console.log(req.body);
-        const hashedpassword = await bcrypt.hash
-        const user = await User.findOne({
+        const existingUser = await User.findOne({
+            email: req.body.email
+        });
+        if (existingUser) {
+            return res.json({ message: "User already exists" });
+        }
+        const hashedpassword = await bcrypt.hash(
+            req.body.password,
+            10
+        );
+        const user = await User.create({
             email: req.body.email,
             password: hashedpassword
         });
-        const isMatch = 
-        await bcrypt.compare(req.body.password, user.password);
         res.json(user);
     }
 );
@@ -102,7 +109,7 @@ app.post(
         }
         const token = jwt.sign(
             { id: user._id },
-            "vedantSecretKey"
+            process.env.JWT_SECRET
 
         );
         res.json({
