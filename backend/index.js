@@ -112,18 +112,19 @@ app.post(
     }
 );
 app.delete(
-    "/tasks",
+    "/tasks", authMiddleware,
     async (req, res) => {
 
         console.log("BODY:", req.body);
 
         const result = await Task.deleteOne({
-            _id: req.body.id
+            _id: req.body.id,
+            userId: req.user.id
         });
 
         console.log("RESULT:", result);
 
-        const data = await Task.find();
+        const data = await Task.find({ userId: req.user.id });
 
         res.json(data);
     }
