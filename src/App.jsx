@@ -1,4 +1,5 @@
 import Login from "./components/Login";
+import Register from "./components/Register";
 import { useState, useEffect } from "react";
 function App() {
 
@@ -134,34 +135,22 @@ if(page === "login") {
         />
     );
 }
-  if (page === "register") {
+if(page === "register") {
+
     return (
-      <div
-        style={{
-       display: "flex",
-       flexDirection: "column",
-       gap: "10px",
-       width: "250px",
-       margin: "100px auto"
-      }}
-      >
-        <h1>Register</h1>
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+
+        <Register
+            email={email}
+            password={password}
+            setEmail={setEmail}
+            setPassword={setPassword}
+            register={register}
+            setPage={setPage}
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button onClick={register}>Register</button>
-        <button onClick={() => setPage("login")}>Login Instead</button>
-      </div>
+
     );
-  }
+
+}
   return (
     <div>
       <button
