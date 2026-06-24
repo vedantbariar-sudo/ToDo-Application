@@ -14,6 +14,7 @@ useEffect(() => {
         localStorage.getItem("token");
     if(token) {
         setPage("todo");
+        getTasks();
     }
 }, []);
 
@@ -33,6 +34,39 @@ async function login(){
   else{
     alert(data.message);
   }
+  setEmail("");
+  setPassword("");
+}
+
+async function register() {
+    const response = await fetch(
+        "https://vedant-todo-backend.onrender.com/register",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        }
+    );
+    const data = await response.json();
+   if(data.message){
+    alert(data.message);
+   }
+   else{
+    alert("User registered successfully");
+   }
+    setPage("login");
+  setEmail("");
+  setPassword("");
+}
+
+function logout() {
+
+    localStorage.removeItem(
+        "token"
+    );
+    setTasks([]);
+    setPage("login");
+
 }
   
   async function getTasks() {
@@ -49,15 +83,15 @@ async function login(){
     setTasks(data);
     
 }
-useEffect(() => {
-  getTasks();
-}, []);
+
  async function addTask() {
     if (input.trim() !== "") {
       const token = localStorage.getItem("token");
       const response = await fetch("https://vedant-todo-backend.onrender.com/tasks", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+         },
         body: JSON.stringify({ task: input })
       });
         const data = await response.json();
@@ -68,12 +102,14 @@ useEffect(() => {
     }
   }
    async function deleteTask(id) {
+    const token = localStorage.getItem("token");
     const response = await fetch(
         "https://vedant-todo-backend.onrender.com/tasks",
         {
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({ id })
         }
@@ -85,39 +121,84 @@ useEffect(() => {
 } 
     console.log(tasks);
 
-  if(page === "login") {
+  if (page === "login") {
     return (
-        <div>
-            <h1>Login</h1>
-            <input
-                placeholder="Email"
-                value={email}
-                onChange={(e) =>
-                    setEmail(e.target.value)
-                }
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) =>
-                    setPassword(e.target.value)
-                }
-            />
-            <button onClick={login}>
-                Login
-            </button>
-            <button onClick={() =>
-                setPage("register")
-    }
->
-    Register Instead
-</button>
-        </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          width: "250px"
+        }}
+      >
+        <div
+    style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "10px",
+        width: "250px"
+    }}
+      >     
+      </div>
+        <h1>Login</h1>
+        <input
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button onClick={login}>Login</button>
+        <button onClick={() => setPage("register")}>Register Instead</button>
+      </div>
     );
-}
+  }
+  if (page === "register") {
+    return (
+      <div
+        style={{
+       display: "flex",
+       flexDirection: "column",
+       gap: "10px",
+       width: "250px",
+       margin: "100px auto"
+      }}
+      >
+        <h1>Register</h1>
+        <input
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button onClick={register}>Register</button>
+        <button onClick={() => setPage("login")}>Login Instead</button>
+      </div>
+    );
+  }
   return (
-    <div> 
+    <div>
+      <button
+    onClick={logout}
+    style={{
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    width: "250px",
+    margin: "100px auto"
+    }}
+      >
+    Logout
+      </button>
       <h1>My To-Do List</h1>
       <input
         placeholder="Enter a new task"
