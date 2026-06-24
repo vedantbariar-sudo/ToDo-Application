@@ -1,3 +1,4 @@
+import Login from "./components/Login";
 import { useState, useEffect } from "react";
 function App() {
 
@@ -121,42 +122,18 @@ function logout() {
 } 
     console.log(tasks);
 
-  if (page === "login") {
+if(page === "login") {
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          width: "250px"
-        }}
-      >
-        <div
-    style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "10px",
-        width: "250px"
-    }}
-      >     
-      </div>
-        <h1>Login</h1>
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+        <Login
+            email={email}
+            password={password}
+            setEmail={setEmail}
+            setPassword={setPassword}
+            login={login}
+            setPage={setPage}
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button onClick={login}>Login</button>
-        <button onClick={() => setPage("register")}>Register Instead</button>
-      </div>
     );
-  }
+}
   if (page === "register") {
     return (
       <div
