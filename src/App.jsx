@@ -1,5 +1,6 @@
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Todo from "./components/Todo";
 import { useState, useEffect } from "react";
 function App() {
 
@@ -152,38 +153,16 @@ if(page === "register") {
 
 }
   return (
-    <div>
-      <button
-    onClick={logout}
-    style={{
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-    width: "250px",
-    margin: "100px auto"
-    }}
-      >
-    Logout
-      </button>
-      <h1>My To-Do List</h1>
-      <input
-        placeholder="Enter a new task"
-        value={input}
-        onChange={(event) => setInput(event.target.value)}
-      />
-      <button onClick={addTask}>Add Task</button>
-      {tasks.map((task) => (
-    <div key={task._id}>
-        <span>{task.task}</span>
 
-        <button
-            onClick={() => deleteTask(task._id)}
-        >
-            Delete
-        </button>
-    </div>
-))}
-    </div>
-  );
+    <Todo
+        tasks={tasks}
+        input={input}
+        setInput={setInput}
+        addTask={addTask}
+        deleteTask={deleteTask}
+        logout={logout}
+    />
+
+);
 }
 export default App;
